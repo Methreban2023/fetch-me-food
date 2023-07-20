@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#000000",
   },
   input: {
     height: 40,
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   text: {
-    color: "black",
+    color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },

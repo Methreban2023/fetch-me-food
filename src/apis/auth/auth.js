@@ -1,22 +1,33 @@
 const signIn = async (userInfo) => {
   try {
-    const { data } = await instance.post("/auth/signIn", userInfo);
-    storeToken(data.access);
-    console.log(data);
-    return data;
+    const res = await instance.post("/auth/signIn", userInfo);
+    // storeToken(data.access);
+    console.log(res.data);
+    return res.data;
   } catch (error) {
     throw error;
   }
 };
 
-const signOut = async (userInfo) => {
+const signUp = async (userInfo) => {
   try {
     console.log(userInfo);
+
     const formData = new FormData();
-    for (const key in userInfo) formData.append(key, userInfo[key]);
-    const { data } = await instance.post("/auth/signOut", formData);
-    storeToken(data.access);
-    return data;
+
+    for (const key in userInfo) {
+      if (key !== "image") {
+        formData.append(key, userInfo[key]);
+      }
+    }
+    formData.append("image", {
+      name: userInfo.image,
+      type: "image/jpeg",
+      uri: userInfo.image,
+    });
+    const res = await instance.post("/auth/signUp", formData);
+    storeToken(res.data);
+    return res.data;
   } catch (error) {
     if (error.response.data.name === "ValidationError") {
       alert(
