@@ -9,10 +9,22 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-
+import { useMutation } from "@tanstack/react-query";
+import signUp from "../apis/auth/auth";
+import { colors } from "../utils/colors/colors";
 const SignUp = ({ navigation }) => {
   const [userInfo, setUserInfo] = useState({});
   const [image, setImage] = useState(null);
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const { mutate: signUpFn, error } = useMutation({
+    mutationFn: () => signUp({ ...userInfo, image }),
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -20,12 +32,27 @@ const SignUp = ({ navigation }) => {
       aspect: [4, 3],
       quality: 1,
     });
-
     console.log(result);
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
+  };
+
+  const validatePassword = (password) => {
+    const regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{8,}$/;
+
+    if (!regex.test(password)) {
+      return setPasswordError(
+        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number."
+      );
+    }
+
+    return setPasswordError("");
+  };
+  const passwordChangeHandler = (value) => {
+    setUserInfo({ ...userInfo, password: value });
+    setPassword(value);
+    setPasswordError(validatePassword(value));
   };
   console.log(userInfo);
   return (
@@ -70,13 +97,20 @@ const SignUp = ({ navigation }) => {
       <Text style={styles.text}>Password</Text>
       <TextInput
         style={styles.input}
-        onChangeText={(value) => {
-          setUserInfo({ ...userInfo, password: value });
-        }}
+        secureTextEntry
+        value={password}
+        onChangeText={passwordChangeHandler}
         placeholder="password"
       />
-
-      <Button title="Sign Up" onPress={() => {}} />
+      {/* {passwordError !== "" && (
+        <Text style={{ color: "red" }}>{passwordError}</Text>
+      )} */}
+      <Button
+        title="Sign Up"
+        onPress={() => {
+          signUpFn;
+        }}
+      />
     </View>
   );
 };
@@ -85,6 +119,7 @@ export default SignUp;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -92,12 +127,13 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: colors.orange,
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
     fontSize: 16,
-    backgroundColor: "white",
+    backgroundColor: colors.white,
+    width: 300,
   },
   text: {
     color: "white",

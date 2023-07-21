@@ -1,7 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { Searchbar } from "react-native-paper";
 
 const Home = ({ navigation }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <>
       <View style={{ padding: 16, backgroundColor: "green" }}>

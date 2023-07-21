@@ -1,7 +1,7 @@
 const ROUTES = {
   AUTHROUTES: {
     SIGNIN: "SignIn",
-    SIGNOUT: "Signout",
+    SIGNUP: "SignUp",
     FORGOT: "ForgotPassword",
   },
   APPROUTES: {

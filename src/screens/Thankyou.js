@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { colors } from "../utils/colors/colors";
 
 const Thankyou = ({ navigation }) => {
   return (
-    <View>
+    <View style={{ backgroundColor: colors.black }}>
       <Text>Thankyou</Text>
     </View>
   );

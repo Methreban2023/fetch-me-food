@@ -7,11 +7,23 @@ import {
   Image,
 } from "react-native";
 import { TextInput } from "react-native-paper";
-import React from "react";
+import React, { useState } from "react";
 import { colors } from "../utils/colors/colors";
-// import { RoundedButton } from "../componenats/designs/RoundedButton";
+import signIn from "../apis/auth/auth";
 import ROUTES from "../navigation";
+import { useMutation } from "@tanstack/react-query";
 const SignIn = ({ navigation }) => {
+  const [userInfo, setUserInfo] = useState({});
+  const {
+    mutate: signInFn,
+    error,
+    isLoading,
+  } = useMutation({
+    mutationFn: () => signIn(userInfo),
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
   return (
     <View style={styles.container}>
       <Image
@@ -20,10 +32,27 @@ const SignIn = ({ navigation }) => {
       />
       <View style={styles.entery}>
         <Text style={styles.text}>Email</Text>
-        <TextInput style={styles.input} placeholder="email" />
+        <TextInput
+          style={styles.input}
+          placeholder="email"
+          onChangeText={(value) => {
+            setUserInfo({ ...userInfo, email: value });
+          }}
+        />
         <Text style={styles.text}>Password</Text>
-        <TextInput style={styles.input} placeholder="password" />
-        <Button title="Sign In" onPress={() => {}} />
+        <TextInput
+          style={styles.input}
+          placeholder="password"
+          onChangeText={(value) => {
+            setUserInfo({ ...userInfo, password: value });
+          }}
+        />
+        <Button
+          title="Sign In"
+          onPress={() => {
+            signInFn;
+          }}
+        />
       </View>
       <View style={styles.link_position}>
         <TouchableOpacity
@@ -33,7 +62,7 @@ const SignIn = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate(ROUTES.AUTHROUTES.SIGNOUT)}
+          onPress={() => navigation.navigate(ROUTES.AUTHROUTES.SIGNUP)}
         >
           <Text style={styles.link_text}>SignUp</Text>
         </TouchableOpacity>

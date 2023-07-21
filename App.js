@@ -10,8 +10,8 @@ export default function App() {
     <QueryClientProvider client={new QueryClient()}>
       <NavigationContainer>
         <SafeAreaView style={styles.container}>
-          <AppNavigation />
-          {/* <AuthNavigation /> */}
+          {/* <AppNavigation /> */}
+          <AuthNavigation />
         </SafeAreaView>
       </NavigationContainer>
     </QueryClientProvider>
